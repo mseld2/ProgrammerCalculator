@@ -1,0 +1,52 @@
+EBNF grammar for programmer calculator
+
+start_expr 
+    := xor_expr { '|' xor_expr }
+
+xor_expr 
+    := and_expr { '^' and_expr }
+
+and_expr 
+    := shift_expr { '&' shift_expr }
+
+shift_expr 
+    := arith_expr { ( '<<' | '>>' ) arith_expr }
+
+arith_expr
+    := term { ( '+' | '-' ) term }
+
+term 
+    := factor { ( '*' | '/' | '%' | '//' ) factor }
+
+factor 
+    := ( '-' | '~' ) primary | primary
+
+primary 
+    := hex_number | binary_number | octal_number | decimal_number | '('' start_expr ')'
+
+hex_number 
+    := '0x' hex_digit { hex_digit }
+
+hex_digit
+    := '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'a' | 'A' | 'b' | 'B' | 'c' | 'C' | 'd' | 'D' | 'e' | 'E' | ''f' | 'F'
+
+binary_number
+    := '0b' binary_digit { binary_digit }
+
+binary_digit 
+    := '0' | '1'
+
+octal_number
+    := '0o' octal_digit { octal_digit }
+
+octal_digit
+    := '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7'
+
+decimal_number
+    := decimal_digit { decimal_digit }
+
+decimal_digit
+    := '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' 
+
+
+
