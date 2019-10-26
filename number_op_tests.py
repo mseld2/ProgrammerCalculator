@@ -113,14 +113,14 @@ class NumberOpTests(unittest.TestCase):
     @unittest.expectedFailure
     def test_fails_if_subtraction_overflow(self):
         left = Number().fromNumber(1)
-        right = Number().fromNumber(-18_446_744_073_709_551_61)
+        right = Number().fromNumber(-18_446_744_073_709_551_615)
 
         left - right          
 
     @unittest.expectedFailure
     def test_fails_if_subtraction_underflow(self):
         left = Number().fromNumber(-9_223_372_036_854_775_808)
-        right = Number().fromNumber(-1)
+        right = Number().fromNumber(1)
 
         left - right 
 
