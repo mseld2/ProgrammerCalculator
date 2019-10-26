@@ -3,10 +3,10 @@ import re
 class Number(object):
 
     """A decimal (base 10), hex (base 16), binary (base 2) or octal (base 8) number
-            Binary format: ^(-0b|0b)[0-1]+$
-            Hex format: ^(-0x|0x)[a-fA-F0-9]+$
-            Octal format: ^(-0o|0o)[0-7]+$
-            Decimal format: ^([-]{0,1})[1-9]{1}[0-9]*$
+            Binary format: (-0b|0b)[0-1]+
+            Hex format: (-0x|0x)[a-fA-F0-9]+
+            Octal format: (-0o|0o)[0-7]+
+            Decimal format: ([-]{0,1})[0-9]+
             
         Max (unsigned long long): 18,446,744,073,709,551,615
         Min (signed long long): -9,223,372,036,854,775,808"""
@@ -114,20 +114,20 @@ class Number(object):
         return Number().fromNumber(result)            
 
     def _parse(self, string):
-        if re.match("^(-0b|0b)[0-1]+$", string):
+        if re.match("(-0b|0b)[0-1]+", string):
             self._number = int(string, 2)
-        elif re.match("^(-0x|0x)[a-fA-F0-9]+$", string):
+        elif re.match("(-0x|0x)[a-fA-F0-9]+", string):
             self._number = int(string, 16)
-        elif re.match("^(-0o|0o)[0-7]+$", string):
+        elif re.match("(-0o|0o)[0-7]+", string):
             self._number = int(string, 8)
-        elif re.match("^([-]{0,1})[1-9]{1}[0-9]+$", string):
+        elif re.match("([-]{0,1})[0-9]+", string):
             self._number = int(string, 10)
         else:
             print("Invalid format\n")
-            print("  Binary format: ^(-0b|0b)[0-1]+$\n")
-            print("  Hex format: ^(-0x|0x)[a-fA-F0-9]+$\n")
-            print("  Octal format: ^(-0o|0o)[0-7]+$\n")
-            print("  Decimal format: ^([-]{0,1})[1-9]{1}[0-9]*$\n")
+            print("  Binary format: (-0b|0b)[0-1]+\n")
+            print("  Hex format: (-0x|0x)[a-fA-F0-9]+\n")
+            print("  Octal format: (-0o|0o)[0-7]+\n")
+            print("  Decimal format: ([-]{0,1})[0-9]+\n")
             raise ValueError("Invalid format")
 
         if self.number < self.min or self.number > self.max:
