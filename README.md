@@ -30,7 +30,7 @@ Operations:
 ```
 
 ```
-> python calculator "(b11110000 >> 4) & 0x0f"    
+> python calculator "(b11110000 >> 4) & x0f"    
     15  
 0x  0000F   
 0b  1111  
