@@ -57,7 +57,7 @@ class Tokenizer(object):
             elif tokenTypeKind == TokenType.HEX or tokenTypeKind == TokenType.OCTAL or tokenTypeKind == TokenType.BINARY:
                 value = f'0{value}'
             elif TokenType[kind] == TokenType.ERROR:
-                raise RuntimeError(f'Unexpected value {value} at position {position}')
+                raise SyntaxError(f'Unexpected value {value} at position {position}')
 
             yield Token(TokenType[kind], value)
 
