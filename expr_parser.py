@@ -8,7 +8,8 @@ class ExprParser(object):
     Parser for grammar specified in 'language_definition.txt'
     See: https://en.wikipedia.org/wiki/Recursive_descent_parser
 
-    NOTE: Parenthesis are needed to enforce precedence
+    Note: Need paranthesis to enforce precedence for ~ and -
+        Example: ~(-b11011011) or -(~b11011011)
     '''
 
     def parse(self, expr):
@@ -18,7 +19,6 @@ class ExprParser(object):
         self._nextToken()
 
         return self.startExpr()
-
 
     def _nextToken(self):
         self.currentToken, self.nextToken = self.nextToken, next(self.tokens, None)
@@ -36,110 +36,108 @@ class ExprParser(object):
         
         raise SyntaxError(f'Expected {tokenType.name}')
 
-    # start_expr 
-    #   := xor_expr { '|' xor_expr }
     def startExpr(self):
         '''
+        L -> R
         start_expr 
             := xor_expr { '|' xor_expr }
         '''
 
         result = self.xorExpr()
-        if self._accept(TokenType.OR):
+        while self._accept(TokenType.OR):
             if self.currentToken.type != TokenType.OR:
                 raise SyntaxError(f'Expected |, got {self.currentToken.value}')
-            return result | self.xorExpr()
+            result |= self.xorExpr()
         
         return result
 
-
     def xorExpr(self):
         '''
+        L -> R
         xor_expr 
             := and_expr { '^' and_expr }
         '''
 
         result = self.andExpr()
-        if self._accept(TokenType.XOR):
+        while self._accept(TokenType.XOR):
             if self.currentToken.type != TokenType.XOR:
                 raise SyntaxError(f'Expected ^, got {self.currentToken.value}')
-            return result ^ self.andExpr()
+            result ^= self.andExpr()
         
         return result
 
-
     def andExpr(self):
         '''
+        L -> R
         and_expr 
             := shift_expr { '&' shift_expr }
         '''
         result = self.shiftExpr()
-        if self._accept(TokenType.AND):
+        while self._accept(TokenType.AND):
             if self.currentToken.type != TokenType.AND:
                 raise SyntaxError(f'Expected &, got {self.currentToken.value}')
-            return result & self.shiftExpr()
+            result &= self.shiftExpr()
         
         return result
 
     def shiftExpr(self):
         '''
+        L -> R
         shift_expr 
             := arith_expr { ( '<<' | '>>' ) arith_expr }
         '''
 
         result = self.arithExpr()
-        if self._accept(TokenType.LSHIFT):
-            if self.currentToken.type != TokenType.LSHIFT:
-                raise SyntaxError(f'Expected <<, got {self.currentToken.value}')
-            return result << self.arithExpr()
-        elif self._accept(TokenType.RSHIFT):
-            if self.currentToken.type != TokenType.RSHIFT:
-                raise SyntaxError(f'Expected >>, got {self.currentToken.value}')
-            return result >> self.arithExpr()
+        while self._accept(TokenType.LSHIFT) or self._accept(TokenType.RSHIFT):
+            if self.currentToken.type == TokenType.LSHIFT:
+                result = result << self.arithExpr()
+            elif self.currentToken.type == TokenType.RSHIFT:
+                result = result >> self.arithExpr()
+            else:
+                raise SyntaxError(f'Expected >> or <<, got {self.currentToken.value}')
         
         return result
 
     def arithExpr(self):
         '''
+        L -> R
         arith_expr
             := term { ( '+' | '-' ) term }
         '''
 
         result = self.term()
-        if self._accept(TokenType.ADD):
-            if self.currentToken.type != TokenType.ADD:
-                raise SyntaxError(f'Expected +, got {self.currentToken.value}')           
-            return result + self.term()
-        elif self._accept(TokenType.MINUS):
-            if self.currentToken.type != TokenType.MINUS:
-                raise SyntaxError(f'Expected -, got {self.currentToken.value}')  
-            return result - self.term()
+        while self._accept(TokenType.ADD) or self._accept(TokenType.MINUS):
+            if self.currentToken.type == TokenType.ADD:
+                result += self.term()
+            elif self.currentToken.type == TokenType.MINUS:
+                result -= self.term()
+            else:
+                raise SyntaxError(f'Expected + or -, got {self.currentToken.value}')           
 
         return result
 
     def term(self):
         '''
+        L -> R
         term 
             := factor { ( '*' | '%' | '//' ) factor }
         '''
         result = self.factor()
-        if self._accept(TokenType.MULTIPLY):
-            if self.currentToken.type != TokenType.MULTIPLY:
-                raise SyntaxError(f'Expected *, got {self.currentToken.value}')  
-            return result * self.factor()
-        elif self._accept(TokenType.REMAINDER):
-            if self.currentToken.type != TokenType.REMAINDER:
-                raise SyntaxError(f'Expected %, got {self.currentToken.value}')  
-            return result % self.factor()
-        elif self._accept(TokenType.DIVIDE):
-            if self.currentToken.type != TokenType.DIVIDE:
-                raise SyntaxError(f'Expected //, got {self.currentToken.value}')  
-            return result // self.factor()
-            
+        while self._accept(TokenType.MULTIPLY) or self._accept(TokenType.REMAINDER) or self._accept(TokenType.DIVIDE):
+            if self.currentToken.type == TokenType.MULTIPLY:
+                result *= self.factor()
+            elif self.currentToken.type == TokenType.REMAINDER:
+                result %= self.factor()
+            elif self.currentToken.type == TokenType.DIVIDE:
+                result //= self.factor()
+            else:
+                raise SyntaxError(f'Expected *, % or //, got {self.currentToken.value}')  
+        
         return result
 
     def factor(self):
         '''
+        L -> R
         factor 
             := ('-'|'~' ) primary | primary
         '''
@@ -183,6 +181,6 @@ class ExprParser(object):
 
             return result
         else:
-            raise SyntaxError(f'got unexpected token {self.nextToken.value}') 
+            raise SyntaxError(f'Got unexpected token {self.nextToken.value}') 
 
 
