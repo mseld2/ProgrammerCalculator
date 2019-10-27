@@ -38,6 +38,6 @@ Operations:
 ```
 
 # To Do
-*  Update expression parser so it honors the operator precedence described in grammar. Currently precedence has to be enforced with parenthesis.
+*  Update expression parser so that expressions don't have to be grouped. 
 *  Add GUI. Currently has command-line interface.
 
