@@ -10,7 +10,7 @@ Supported bases:
 
 Operations:
 *  Shift
-*  Invert
+*  Invert (-x - 1)
 *  Bitwise xor, and, or
 *  Addition, subtraction
 *  Multiplication, division, modulus
