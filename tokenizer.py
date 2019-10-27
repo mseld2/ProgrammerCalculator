@@ -6,7 +6,7 @@ from number import Number
 Token = collections.namedtuple('Token', ['type', 'value'])
 
 class Tokenizer(object):
-    ''''
+    '''
     Tokenizer for programmer calculator
     See: https://docs.python.org/3/library/re.html (Writing a Tokenizer)
 
@@ -46,7 +46,7 @@ class Tokenizer(object):
         ]
 
     def tokenize(self):
-        tokenRegex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in self._tokenDefinitions)
+        tokenRegex = '|'.join(f'(?P<%s>%s)' % pair for pair in self._tokenDefinitions)
         for match in re.finditer(tokenRegex, self.expr):
             kind = match.lastgroup
             value = match.group()
