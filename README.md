@@ -1,20 +1,21 @@
 # Programmer Calculator
 
-When it's done, the calculator will allow users to perform the following operations:
-*  Bit manipulations (or, xor, ~, and)
-*  Mathematical operations (add, subtract, multiply, divide, remainder)
-*  Expressions (grouping, etc.)
+Simple calculator for programmers. 
 
-Supported bases are
+Supported bases:
 *  Decimal (base 10)
-*  Hexidecimal (base 16)
+*  Hex (base 16)
 *  Binary (base 2)
 *  Octal (base 8)
 
-I'm just learning Python. If there are ways things can be done better, I'd love to know.
+Operations:
+*  Shift
+*  Invert
+*  Bitwise xor, and, or
+*  Addition, subtraction
+*  Multiplication, division, modulus
 
 To do:
-*  Expression parser
-*  Interface. At first will be command line, but will add GUI to help me learn how to make a GUI in Python.
-
+*  Update expression parser so it honors the operator precedence described in grammar. Currently precedence has to be enforced with parenthesis.
+*  Add GUI
 
