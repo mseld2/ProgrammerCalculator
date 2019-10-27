@@ -10,7 +10,7 @@ class NumberOpTests(unittest.TestCase):
         result = left + right
 
         self.assertEqual(0x1E, result.number)
-        self.assertEqual("0x1E", result.asHex)
+        self.assertEqual("001E", result.asHex)
 
     def test_can_add_with_negative_result(self):
         left = Number().fromNumber(-0x17)
@@ -19,7 +19,7 @@ class NumberOpTests(unittest.TestCase):
         result = left + right
 
         self.assertEqual(-0x1E, result.number)
-        self.assertEqual("-0x1E", result.asHex)      
+        self.assertEqual("-001E", result.asHex)      
 
     @unittest.expectedFailure
     def test_fails_if_add_overflow(self):
@@ -42,7 +42,7 @@ class NumberOpTests(unittest.TestCase):
         result = left * right
 
         self.assertEqual(0xA1, result.number)
-        self.assertEqual("0xA1", result.asHex)             
+        self.assertEqual("00A1", result.asHex)             
 
     def test_can_multiply_with_negative_result(self):
         left = Number().fromNumber(0x17)
@@ -51,7 +51,7 @@ class NumberOpTests(unittest.TestCase):
         result = left * right
 
         self.assertEqual(-0xA1, result.number)
-        self.assertEqual("-0xA1", result.asHex)      
+        self.assertEqual("-00A1", result.asHex)      
 
     @unittest.expectedFailure
     def test_fails_if_multiply_overflow(self):
@@ -74,7 +74,7 @@ class NumberOpTests(unittest.TestCase):
         result = left // right
 
         self.assertEqual(0x04, result.number)
-        self.assertEqual("0x4", result.asHex)                 
+        self.assertEqual("0004", result.asHex)                 
 
     def test_can_divide_with_negative_result(self):
         left = Number().fromNumber(-0x10)
@@ -83,7 +83,7 @@ class NumberOpTests(unittest.TestCase):
         result = left // right
 
         self.assertEqual(-0x04, result.number)
-        self.assertEqual("-0x4", result.asHex)
+        self.assertEqual("-0004", result.asHex)
 
     @unittest.expectedFailure
     def test_cannot_divide_by_0(self):
@@ -99,7 +99,7 @@ class NumberOpTests(unittest.TestCase):
         result = left - right
       
         self.assertEqual(16, result.number)
-        self.assertEqual("0x10", result.asHex) 
+        self.assertEqual("0010", result.asHex) 
 
     def test_can_subtract_with_negative_result(self):
         left = Number().fromNumber(0x10)
@@ -108,7 +108,7 @@ class NumberOpTests(unittest.TestCase):
         result = left - right
       
         self.assertEqual(-16, result.number)
-        self.assertEqual("-0x10", result.asHex)                                     
+        self.assertEqual("-0010", result.asHex)                                     
 
     @unittest.expectedFailure
     def test_fails_if_subtraction_overflow(self):
@@ -130,21 +130,21 @@ class NumberOpTests(unittest.TestCase):
         result = ~value
 
         self.assertEqual(-22, result.number)
-        self.assertEqual("-0x16", result.asHex)
+        self.assertEqual("-0016", result.asHex)
 
     def test_can_shift_left(self):
         value = Number().fromNumber(0b1101010) 
 
-        result = value << 1
+        result = value << Number().fromNumber(1)
 
         self.assertEqual(0b11010100, result.number) 
-        self.assertEqual("0b11010100", result.asBinary)
+        self.assertEqual("1101 0100", result.asBinary)
 
     @unittest.expectedFailure
     def test_fails_if_negative_shift_left(self):
         value = Number().fromNumber(0b1101010)
 
-        value >> -1       
+        value >> Number().fromNumber(-1)     
 
     @unittest.expectedFailure
     def test_fails_if_amount_too_large_left_shift(self):
@@ -155,16 +155,16 @@ class NumberOpTests(unittest.TestCase):
     def test_can_shift_right(self):
         value = Number().fromNumber(0b11010100) 
 
-        result = value >> 1
+        result = value >> Number().fromNumber(1)
 
         self.assertEqual(0b1101010, result.number) 
-        self.assertEqual("0b1101010", result.asBinary)
+        self.assertEqual("0110 1010", result.asBinary)
 
     @unittest.expectedFailure
     def test_fails_if_negative_shift_right(self):
         value = Number().fromNumber(0b11010100)  
 
-        value >> -1       
+        value >> Number().fromNumber(-1)       
 
     @unittest.expectedFailure
     def test_fails_if_amount_too_large_right_shift(self):
@@ -179,7 +179,7 @@ class NumberOpTests(unittest.TestCase):
         result = left & right
 
         self.assertEqual(0x01, result.number) 
-        self.assertEqual("0b1", result.asBinary)
+        self.assertEqual("0001", result.asBinary)
 
     def test_can_xor(self):
         left = Number().fromNumber(0b110101) 
@@ -188,7 +188,7 @@ class NumberOpTests(unittest.TestCase):
         result = left ^ right
 
         self.assertEqual(0b110110, result.number) 
-        self.assertEqual("0b110110", result.asBinary)    
+        self.assertEqual("0011 0110", result.asBinary)    
 
     def test_can_or(self):
         left = Number().fromNumber(0b110101) 
@@ -197,4 +197,4 @@ class NumberOpTests(unittest.TestCase):
         result = left | right
 
         self.assertEqual(0b110111, result.number) 
-        self.assertEqual("0b110111", result.asBinary)
+        self.assertEqual("0011 0111", result.asBinary)

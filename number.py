@@ -142,10 +142,44 @@ class Number(object):
         self._setStringValues()
 
     def _setStringValues(self):
-        self._asBinary = bin(self.number)
-        self._asHex = self.__str__()
-        self._asOctal = oct(self.number)
-        self._asDecimal = str(self.number)
+        self._asBinary = self._group(bin(self.number))
+        self._asHex = self._group(self.__str__())
+        self._asOctal = self._group(oct(self.number))
+        self._asDecimal = self._comma(str(self.number))
+
+    def _group(self, value):
+        start = 2
+        if value[0] == '-':
+            start = 3
+
+        digits = value[start:]
+        backwards = digits[::-1]
+        str = ""
+        for index in range(len(backwards)):
+            if index > 0 and index % 4 == 0:
+                str = f' {str}'
+            str = f'{backwards[index]}{str}'
+
+        fillers = 4 - (len(digits) % 4)
+        if fillers != 4:
+            for _ in range(fillers):
+                str = f'{0}{str}'
+
+        if start == 2:
+            return f'{str}'
+        else:
+            return f'-{str}'
+
+    def _comma(self, value):
+        backwards = value[::-1]
+
+        str = ""
+        for index in range(len(backwards)):
+            if index > 0 and index % 3 == 0:
+                str = f',{str}'
+            str = f'{backwards[index]}{str}'
+
+        return str
 
     def __str__(self):  
         string = hex(self._number)
