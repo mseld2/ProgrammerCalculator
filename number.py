@@ -82,19 +82,24 @@ class Number(object):
 
         return Number().fromNumber(result)
 
+    def __mod__(self, other):
+        result = self.number % other.number
+
+        return Number().fromNumber(result)
+
     def __lshift__(self, amount):
-        if amount > 63 or amount < 0:
+        if amount.number > 63 or amount.number < 0:
             raise IndexError("Shift amount is out of range")
 
-        result = self.number << amount
+        result = self.number << amount.number
 
         return Number().fromNumber(result)
 
     def __rshift__(self, amount):
-        if amount > 63 or amount < 0:
+        if amount.number > 63 or amount.number < 0:
             raise IndexError("Shift amount is out of range")
 
-        result = self.number >> amount
+        result = self.number >> amount.number
 
         return Number().fromNumber(result)
 
@@ -111,7 +116,7 @@ class Number(object):
     def __or__(self, other):
         result = self.number | other.number
 
-        return Number().fromNumber(result)            
+        return Number().fromNumber(result)  
 
     def _parse(self, string):
         if re.match("(-0b|0b)[0-1]+", string):
