@@ -22,10 +22,6 @@ class ExprParser(object):
 
     def _nextToken(self):
         self.currentToken, self.nextToken = self.nextToken, next(self.tokens, None)
-        if self.currentToken:
-            print(f'Current token: {self.currentToken.value}')
-        if self.nextToken:
-            print(f'Next token: {self.nextToken.value}')
 
     def _accept(self, tokenType):
         if self.nextToken and self.nextToken.type == tokenType:
