@@ -6,6 +6,20 @@ from number import Number
 Token = collections.namedtuple('Token', ['type', 'value'])
 
 class Tokenizer(object):
+    ''''
+    Tokenizer for programmer calculator
+    See: https://docs.python.org/3/library/re.html (Writing a Tokenizer)
+
+    Expected format for numbers
+    Decimal: \b([0-9]+) 
+        Examples: 120, 290, 01
+    Binary: \b(b[0-1]+)
+        Examples: b10101 b001
+    Hex: \b(x[a-fA-F0-9]+)
+        Examples: xae99 x19ed x00FF
+    Octal: \b(o[0-7]+)
+        Examples: o1764 o001
+    '''
 
     def __init__(self, expr):
         self.expr = expr
