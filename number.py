@@ -1,15 +1,16 @@
 import re
 
 class Number(object):
-
-    """A decimal (base 10), hex (base 16), binary (base 2) or octal (base 8) number
+    '''
+    A decimal (base 10), hex (base 16), binary (base 2) or octal (base 8) number
             Binary format: (-0b|0b)[0-1]+
             Hex format: (-0x|0x)[a-fA-F0-9]+
             Octal format: (-0o|0o)[0-7]+
             Decimal format: ([-]{0,1})[0-9]+
             
         Max (unsigned long long): 18,446,744,073,709,551,615
-        Min (signed long long): -9,223,372,036,854,775,808"""
+        Min (signed long long): -9,223,372,036,854,775,808
+    '''
 
     def __init__(self):
         self._number = 0
@@ -22,7 +23,7 @@ class Number(object):
 
     def fromNumber(self, number):
         if number < self.min or number > self.max:
-            raise ValueError("Number out of range")
+            raise ValueError(f'Number out of range: {number}')
         
         self._number = number
         self._setStringValues()
@@ -89,7 +90,7 @@ class Number(object):
 
     def __lshift__(self, amount):
         if amount.number > 63 or amount.number < 0:
-            raise IndexError("Shift amount is out of range")
+            raise IndexError(f'Shift amount out of range: {amount.asDecimal}')
 
         result = self.number << amount.number
 
@@ -97,7 +98,7 @@ class Number(object):
 
     def __rshift__(self, amount):
         if amount.number > 63 or amount.number < 0:
-            raise IndexError("Shift amount is out of range")
+            raise IndexError(f'Shift amount out of range: {amount.asDecimal}')
 
         result = self.number >> amount.number
 
@@ -136,8 +137,9 @@ class Number(object):
             raise ValueError("Invalid format")
 
         if self.number < self.min or self.number > self.max:
+            num = self._number
             self._number = 0
-            raise ValueError("Number out of range")
+            raise ValueError(f'Number out of range: {num}')
 
         self._setStringValues()
 
@@ -148,6 +150,12 @@ class Number(object):
         self._asDecimal = self._comma(str(self.number))
 
     def _group(self, value):
+        '''
+        Put binary, hex and octal digits in groups of 4
+        0101 1001 0001 1000
+        ffff 0000
+        -0017
+        '''
         start = 2
         if value[0] == '-':
             start = 3
@@ -171,7 +179,18 @@ class Number(object):
             return f'-{str}'
 
     def _comma(self, value):
-        backwards = value[::-1]
+        '''
+        Add commas in decimal numbers
+        -1,699
+        100,000
+        92
+        '''
+        start = 0
+        if value[0] == '-':
+            start = 1
+
+        digits = value[start:]
+        backwards = digits[::-1]
 
         str = ""
         for index in range(len(backwards)):
@@ -179,7 +198,10 @@ class Number(object):
                 str = f',{str}'
             str = f'{backwards[index]}{str}'
 
-        return str
+        if start == 0:
+            return str
+        else:
+            return f'-{str}'
 
     def __str__(self):  
         string = hex(self._number)
