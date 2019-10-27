@@ -37,7 +37,3 @@ Operations:
 0o  0017  
 ```
 
-# To Do
-*  Update expression parser so that expressions don't have to be grouped. 
-*  Add GUI. Currently has command-line interface.
-
