@@ -18,11 +18,11 @@ Operations:
 ## Usage
 
 ```
-> python calculater "<expression>"
+> python calculater.py "<expression>"
 ```
   
 ```
-> python calculator x12039    
+> python calculator.py x12039    
     73,785   
 0x  0001 2039   
 0b  0001 0010 0000 0011 1001  
@@ -30,7 +30,7 @@ Operations:
 ```
 
 ```
-> python calculator "(b11110000 >> 4) & x0f"    
+> python calculator.py "(b11110000 >> 4) & x0f"    
     15  
 0x  0000F   
 0b  1111  
